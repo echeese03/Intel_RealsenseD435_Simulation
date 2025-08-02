@@ -1,0 +1,12 @@
+<robot xmlns:xacro="http://www.ros.org/wiki/xacro" name="robot">
+    <xacro:arg name="name" default="rob1"/>
+
+    <xacro:include filename="$(find realsense_d435)/urdf/realsense.urdf.xacro"/>
+
+    <link name="base_link"/>
+
+    <xacro:realsense_d435_sensor robot_name="$(arg name)" parent="base_link">
+        <origin xyz="0.0 0.0 0.0" rpy="0.0 0.0 0.0" />
+    </xacro:realsense_d435_sensor>
+
+</robot>

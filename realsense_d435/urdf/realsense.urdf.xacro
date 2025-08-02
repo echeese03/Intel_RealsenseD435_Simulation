@@ -1,0 +1,92 @@
+<!-- Adapted from model.sdf from OpenRobotics: https://app.gazebosim.org/OpenRobotics/fuel/models/Intel%20RealSense%20D435 -->
+<robot xmlns:xacro="http://www.ros.org/wiki/xacro" name="realsense_d435">
+  <xacro:macro name="realsense_d435_sensor" params="robot_name parent *origin">
+    <xacro:if value="${robot_name != ''}">
+      <xacro:property name="prefix" value="${robot_name + '_'}"/>
+    </xacro:if>
+    <xacro:if value="${robot_name == ''}">
+      <xacro:property name="prefix" value=""/>
+    </xacro:if>
+    <link name="${prefix}camera_link">
+      <xacro:insert_block name="origin" />
+      <visual name="${prefix}visual">
+        <origin xyz="0 0 0" rpy="0 0 1.5708"/>
+        <geometry>
+          <mesh filename="file://$(find realsense_d435)/meshes/realsense.dae"/>
+        </geometry>
+      </visual>
+      <collision name="${prefix}collision">
+        <geometry>
+          <mesh filename="file://$(find realsense_d435)/meshes/realsense.dae"/>
+        </geometry>
+      </collision>
+      <inertial>
+        <origin xyz="0 0 0" rpy="0 0 0" />
+        <mass value="0.0615752"/>
+        <inertia ixx="9.108e-05" ixy="0" ixz="0" iyy="2.51e-06" iyz="0" izz="8.931e-05"/>
+      </inertial>
+    </link>
+
+    <joint name="${prefix}camera_joint" type="fixed">
+        <parent link="${parent}"/>
+        <child link="${prefix}camera_link"/>
+        <origin xyz="0 0 0"/>
+      </joint>
+
+      <gazebo reference="${prefix}camera_link">
+        <sensor name="${prefix}realsense_d435" type="rgbd_camera">
+          <always_on>1</always_on>
+          <visualize>1</visualize>
+          <topic>/${prefix}realsense_d435</topic>
+          <update_rate>60</update_rate>
+          <camera name="${prefix}camera">
+            <horizontal_fov>1.0472</horizontal_fov>
+            <lens>
+              <intrinsics>
+                <!-- fx = fy = width / ( 2 * tan (hfov / 2 ) ) -->
+                <fx>554.25469</fx>
+                <fy>554.25469</fy>
+                <!-- cx = ( width + 1 ) / 2 -->
+                <cx>320.5</cx>
+                <!-- cy = ( height + 1 ) / 2 -->
+                <cy>240.5</cy>
+                <s>0</s>
+              </intrinsics>
+            </lens>
+            <distortion>
+              <k1>0.0</k1>
+              <k2>0.0</k2>
+              <k3>0.0</k3>
+              <p1>0.0</p1>
+              <p2>0.0</p2>
+              <center>0.5 0.5</center>
+            </distortion>
+            <image>
+              <width>640</width>
+              <height>480</height>
+              <format>R8G8B8</format>
+            </image>
+            <clip>
+              <near>0.01</near>
+              <far>300</far>
+            </clip>
+            <depth_camera>
+              <clip>
+                <near>0.1</near>
+                <far>10</far>
+              </clip>
+            </depth_camera>
+            <noise>
+              <type>gaussian</type>
+              <mean>0</mean>
+              <stddev>0.007</stddev>
+            </noise>
+          </camera>
+          <gz_frame_id>${prefix}camera_link</gz_frame_id>
+          <plugin filename="ignition-gazebo-sensors-system"
+              name="ignition::gazebo::systems::Sensors">
+          </plugin>
+        </sensor>
+      </gazebo>
+  </xacro:macro>
+</robot>
