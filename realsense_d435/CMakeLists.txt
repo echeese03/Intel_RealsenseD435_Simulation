@@ -10,6 +10,7 @@ find_package(ament_cmake REQUIRED)
 find_package(xacro REQUIRED)
 find_package(urdf REQUIRED)
 
+install( DIRECTORY materials DESTINATION share/${PROJECT_NAME}/ )
 install( DIRECTORY meshes DESTINATION share/${PROJECT_NAME}/ )
 install( DIRECTORY urdf DESTINATION share/${PROJECT_NAME}/ )
 
