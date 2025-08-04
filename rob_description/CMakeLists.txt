@@ -13,6 +13,7 @@ find_package(realsense_d435 REQUIRED)
 find_package(ignition-cmake2 REQUIRED)
 find_package(robot_state_publisher REQUIRED)
 find_package(ros_gz_sim REQUIRED)
+find_package(ros_ign_bridge REQUIRED)
 
 include_directories(include)
 
